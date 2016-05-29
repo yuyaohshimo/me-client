@@ -1,4 +1,4 @@
-import ListItem from './index';
+import ListItem from '../index';
 
 import expect from 'expect';
 import { shallow } from 'enzyme';
@@ -13,7 +13,7 @@ describe('<ListItem />', () => {
   it('should render the content passed to it', () => {
     const content = 'Hello world!';
     const renderedComponent = shallow(
-      <ListItem content={content} />
+      <ListItem item={content} />
     );
     expect(renderedComponent.contains(content)).toEqual(true);
   });

@@ -34,6 +34,15 @@ import LoadingIndicator from 'components/LoadingIndicator';
 import styles from './styles.css';
 
 export class HomePage extends React.Component {
+  /**
+   * when initial state username is not null, submit the form to load repos
+   */
+  componentDidMount() {
+    if (this.props.username && this.props.username.trim().length > 0) {
+      this.props.onSubmitForm();
+    }
+  }
+
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   /**
@@ -62,7 +71,7 @@ export class HomePage extends React.Component {
     // Show an error if there is one
     } else if (this.props.error !== false) {
       const ErrorComponent = () => (
-        <ListItem content={'Something went wrong, please try again!'} />
+        <ListItem item={'Something went wrong, please try again!'} />
       );
       mainContent = (<List component={ErrorComponent} />);
 
@@ -123,7 +132,7 @@ function mapDispatchToProps(dispatch) {
     onChangeUsername: (evt) => dispatch(changeUsername(evt.target.value)),
     changeRoute: (url) => dispatch(push(url)),
     onSubmitForm: (evt) => {
-      evt.preventDefault();
+      if (evt !== undefined && evt.preventDefault) evt.preventDefault();
       dispatch(loadRepos());
     },
 
