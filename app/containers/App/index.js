@@ -12,25 +12,71 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { createSelector } from 'reselect';
+
+import {
+  selectMenuState,
+} from './selectors';
+
+import { toggleMenu } from './actions';
+
+import styles from './styles.css';
 
 // material ui
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
+// ui components
+import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
+
+
 /* eslint-disable react/prefer-stateless-function */
-export default class App extends React.Component {
+export class App extends React.Component {
 
   static propTypes = {
     children: React.PropTypes.node,
+    openMenu: React.PropTypes.bool,
+    toggleMenu: React.PropTypes.func,
   };
 
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div>
-          {this.props.children}
+          <AppBar
+            title="title"
+            onLeftIconButtonTouchTap={this.props.toggleMenu}
+          >
+            <div>
+              {this.props.children}
+            </div>
+          </AppBar>
+          <Drawer
+            docked={false}
+            open={this.props.openMenu}
+            onRequestChange={this.props.toggleMenu}
+          >
+            <MenuItem onTouchTap={this.props.toggleMenu}>Menu Item</MenuItem>
+            <MenuItem onTouchTap={this.props.toggleMenu}>Menu Item 2</MenuItem>
+          </Drawer>
         </div>
       </MuiThemeProvider>
     );
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    toggleMenu: () => dispatch(toggleMenu()),
+    dispatch,
+  };
+}
+
+export default connect(createSelector(
+  selectMenuState(),
+  (openMenu) => ({ openMenu })
+), mapDispatchToProps)(App);

@@ -1,3 +1,12 @@
+import { createSelector } from 'reselect';
+
+const selectGlobal = () => (state) => state.get('global');
+
+const selectMenuState = () => createSelector(
+  selectGlobal(),
+  (globalState) => globalState.get('openMenu')
+);
+
 // selectLocationState expects a plain JS object for the routing state
 const selectLocationState = () => {
   let prevRoutingState;
@@ -16,5 +25,6 @@ const selectLocationState = () => {
 };
 
 export {
+  selectMenuState,
   selectLocationState,
 };
